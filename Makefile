@@ -4,7 +4,7 @@ CXXFLAGS = -std=c++11 -Wall
 
 # Source and output files
 SRC = main.cpp
-OUT = out
+OUT = output/main
 
 # Default target: compile and run
 all: $(OUT)
