@@ -13,26 +13,31 @@ def request(arduino, pin, mode, frequency, duration):
     arduino.write(data)
 
 def main():
+    #Initialize arduino communication
     ar1 = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
     ar2 = serial.Serial('/dev/ttyUSB1', 9600, timeout=1)
     time.sleep(2.0)
 
-    DELAY = 0.5
-    request(ar1, 1, 2, 261.63, DELAY)
+    DELAY = 0.33
+    #Test first stepper bank (Arduino 1)
+    request(ar1, 1, 2, 523.25, DELAY)
     time.sleep(DELAY)
-    request(ar1, 2, 2, 329.63, DELAY)
+    request(ar1, 2, 2, 659.25, DELAY)
     time.sleep(DELAY)
-    request(ar1, 3, 2, 392.00, DELAY)
+    request(ar1, 3, 2, 783.99, DELAY)
     time.sleep(DELAY)
-    request(ar1, 4, 2, 523.25, DELAY)
+    request(ar1, 4, 2, 1046.50, DELAY)
     time.sleep(DELAY)
-    request(ar1, 3, 2, 392.00, DELAY)
+    request(ar1, 3, 2, 783.99, DELAY)
     time.sleep(DELAY)
-    request(ar1, 2, 2, 329.63, DELAY)
+    request(ar1, 2, 2, 659.25, DELAY)
     time.sleep(DELAY)
-    request(ar1, 1, 2, 261.63, DELAY)
+    request(ar1, 1, 2, 523.25, DELAY)
     time.sleep(DELAY)
 
+    time.sleep(0.5)
+
+    #Test second stepper bank (Arduino 2)
     request(ar2, 1, 2, 523.25, DELAY)
     time.sleep(DELAY)
     request(ar2, 2, 2, 659.25, DELAY)
