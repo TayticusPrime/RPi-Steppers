@@ -53,5 +53,30 @@ def main():
     request(ar2, 1, 2, 523.25, DELAY)
     time.sleep(DELAY)
 
+    time.sleep(0.5)
+    #Enable all
+    request(ar1, 1, 1, 523.25, 0.0)
+    time.sleep(DELAY)
+    request(ar1, 2, 1, 659.25, 0.0)
+    time.sleep(DELAY)
+    request(ar1, 3, 1, 783.99, 0.0)
+    time.sleep(DELAY)
+    request(ar1, 4, 1, 1046.50, 0.0)
+    time.sleep(DELAY)
+    request(ar2, 1, 1, 523.25, 0.0)
+    time.sleep(DELAY)
+    request(ar2, 2, 1, 659.25, 0.0)
+    time.sleep(DELAY)
+    request(ar2, 3, 1, 783.99, 0.0)
+    time.sleep(DELAY)
+    request(ar2, 4, 1, 1046.50, 0.0)
+    time.sleep(DELAY)
+
+    time.sleep(2.0)
+
+    #Deactivate all
+    request(ar1, 1, 3, 0.0, DELAY)
+    request(ar2, 1, 3, 0.0, DELAY)
+
 if __name__ == '__main__':
     main()
