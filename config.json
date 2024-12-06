@@ -1,0 +1,6 @@
+{
+   "arduino": {
+      "port": "/dev/ttyUSB0",
+      "upload_speed": 115200
+   }
+}
