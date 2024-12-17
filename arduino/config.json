@@ -1,0 +1,6 @@
+{
+   "target": "arduino.ino",
+   "board": "arduino:avr:nano",
+   "programmer": "arduino",
+   "additional_flags": []
+}
