@@ -52,7 +52,7 @@ class Track:
 
 class Player:
     def __init__(self, filename):
-        self.controller = Arduino('COM3')
+        self.controller = Arduino('/dev/ttyUSB0')
         self.loadMIDI(filename)
 
     def loadMIDI(self, filename):
@@ -77,9 +77,9 @@ def main():
     player.run()
     '''
 
-    controller = Arduino('COM3')
+    controller = Arduino('/dev/ttyUSB0')
 
-    midi = pretty_midi.PrettyMIDI('song.mid')
+    midi = pretty_midi.PrettyMIDI('song_1.mid')
 
     channel = midi.instruments[0]
     track_1 = Track(channel, controller, 1)
@@ -91,7 +91,6 @@ def main():
     track_4 = Track(channel, controller, 4)
     start = time.time()
     while(True):
-        '''
         track_1.update(time.time() - start)
         time.sleep(0.02)
         track_2.update(time.time() - start)
@@ -100,6 +99,7 @@ def main():
         track_3.update(time.time() - start)
         track_4.update(time.time() - start)
         time.sleep(0.05)
+        '''
     
     '''
     # Extract notes
