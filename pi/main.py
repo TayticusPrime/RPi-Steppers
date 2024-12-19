@@ -43,11 +43,11 @@ class Track:
 
     def update(self, timestamp):
         if self.index < len(self.track.notes) and timestamp >= self.track.notes[self.index].start:
-            pitch = max(0, self.track.notes[self.index].pitch - 12)
+            note = self.track.notes[self.index]
             self.arduino.send(self.stepper, 
                               PULSE, 
-                              NOTES[pitch], 
-                              self.track.notes[self.index].end - self.track.notes[self.index].start)
+                              NOTES[note.note], 
+                              note.end - note.start)
             self.index += 1
 
 class Player:

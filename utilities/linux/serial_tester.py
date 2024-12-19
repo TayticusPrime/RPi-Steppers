@@ -18,6 +18,21 @@ def main():
     ar2 = serial.Serial('/dev/ttyUSB1', 9600, timeout=1)
     time.sleep(2.0)
 
+    request(ar1,1,1,523.25,0.0)
+    request(ar2,1,1,523.25,0.0)
+    request(ar1,2,1,659.25,0.0)
+    request(ar2,2,1,659.25,0.0)
+    request(ar1,3,1,783.99,0.0)
+    request(ar2,3,1,783.99,0.0)
+    request(ar1,4,1,1046.50,0.0)
+    request(ar2,4,1,1046.50,0.0)
+
+    time.sleep(5.0)
+
+    request(ar1,1,3,0.0,0.0)
+    request(ar2,1,3,0.0,0.0)
+
+    '''
     DELAY = 0.33
     #Test first stepper bank (Arduino 1)
     request(ar1, 1, 2, 523.25, DELAY)
@@ -77,6 +92,7 @@ def main():
     #Deactivate all
     request(ar1, 1, 3, 0.0, DELAY)
     request(ar2, 1, 3, 0.0, DELAY)
+    '''
 
 if __name__ == '__main__':
     main()
