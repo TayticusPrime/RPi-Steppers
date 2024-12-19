@@ -46,7 +46,7 @@ class Track:
             note = self.track.notes[self.index]
             self.arduino.send(self.stepper, 
                               PULSE, 
-                              NOTES[note.note], 
+                              NOTES[note.pitch - 12], 
                               note.end - note.start)
             self.index += 1
 
@@ -92,14 +92,10 @@ def main():
     start = time.time()
     while(True):
         track_1.update(time.time() - start)
-        time.sleep(0.02)
         track_2.update(time.time() - start)
-        time.sleep(0.02)
-        '''
         track_3.update(time.time() - start)
         track_4.update(time.time() - start)
         time.sleep(0.05)
-        '''
     
     '''
     # Extract notes
