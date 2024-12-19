@@ -97,6 +97,9 @@ void Controller::update() {
       _active = false;
     }
   }
+  else {
+    delayMicroseconds(BALANCE);
+  }
 }
 
 //Change current stepper direction and return new state
