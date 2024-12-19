@@ -42,17 +42,20 @@ class Track:
         self.index = 1
 
     def update(self, timestamp):
-        if self.index < len(self.track.notes) and timestamp >= self.track.notes[self.index].start:
-            note = self.track.notes[self.index]
-            self.arduino.send(self.stepper, 
-                              PULSE, 
-                              NOTES[note.pitch - 12], 
-                              note.end - note.start)
-            self.index += 1
+        if self.index < len(self.track.notes):
+            if timestamp >= self.track.notes[self.index].start:
+                note = self.track.notes[self.index]
+                self.arduino.send(self.stepper, PULSE, NOTES[note.pitch - 12], note.end - note.start)
+                self.index += 1
+            return False
+
+        else:
+            return True
 
 class Player:
     def __init__(self, filename):
         self.controller = Arduino('/dev/ttyUSB0')
+        self.filename = filename
         self.loadMIDI(filename)
 
     def loadMIDI(self, filename):
@@ -64,46 +67,23 @@ class Player:
             self.tracks.append(Track(instrument, self.controller, i+1))
 
     def run(self):
+        print(f'Playing file \"{self.filename}\"...')
+
         start = time.time()
-        while(True):
+        complete = False
+        while(not complete):
             timestamp = time.time() - start
+            complete = True
             for track in self.tracks:
-                track.update(timestamp)
-            time.sleep(0.1)
+                status = track.update(timestamp)
+                complete = complete and status
+            time.sleep(0.05)
+
+        print(f'Completed \"{self.filename}!\"')
 
 def main():
-    '''
-    player = Player('song.mid')
+    player = Player('song_1.mid')
     player.run()
-    '''
-
-    controller = Arduino('/dev/ttyUSB0')
-
-    midi = pretty_midi.PrettyMIDI('song_1.mid')
-
-    channel = midi.instruments[0]
-    track_1 = Track(channel, controller, 1)
-    channel = midi.instruments[1]
-    track_2 = Track(channel, controller, 2)
-    channel = midi.instruments[2]
-    track_3 = Track(channel, controller, 3)
-    channel = midi.instruments[3]
-    track_4 = Track(channel, controller, 4)
-    start = time.time()
-    while(True):
-        track_1.update(time.time() - start)
-        track_2.update(time.time() - start)
-        track_3.update(time.time() - start)
-        track_4.update(time.time() - start)
-        time.sleep(0.05)
-    
-    '''
-    # Extract notes
-    for i, instrument in enumerate(midi.instruments):
-        print(f"Instrument {i}: {instrument.name}")
-        for note in instrument.notes:
-            print(f"Note: {note.pitch}, Start: {note.start}, End: {note.end}")
-    '''
 
 if __name__ == "__main__":
     main()
