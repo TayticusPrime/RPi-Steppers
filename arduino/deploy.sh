@@ -5,7 +5,7 @@ CONNECTION_FILE="../config.json"
 CONFIG_FILE="config.json"
 TARGET=$(jq -r '.target' "$CONFIG_FILE")
 BOARD=$(jq -r '.board' "$CONFIG_FILE")
-PORTS=$(jq -r '.arduino.port[]' "$CONNECTION_FILE")
+PORTS=$(jq -r '.arduino.ports[]' "$CONNECTION_FILE")
 UPLOAD_SPEED=$(jq -r '.arduino.upload_speed' "$CONNECTION_FILE")
 PROGRAMMER=$(jq -r '.programmer' "$CONFIG_FILE")
 

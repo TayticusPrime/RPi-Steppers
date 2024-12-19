@@ -10,6 +10,7 @@ stepper motors.
 
 #Dependencies
 import argparse
+import json
 import serial
 import struct
 import time
@@ -18,6 +19,8 @@ import pretty_midi
 from notes import NOTES
 
 #Constants
+CONFIG = '../config.json'
+
 INIT_TIME = 2.0
 STEPPERS_PER_CONTROLLER = 4 
 MAX_CONTROLLERS = 2
@@ -74,10 +77,16 @@ class Track:
             return True
 
 class Player:
-    def __init__(self, filename):
-        self.controllers = [
+    def __init__(self, filename, ports=None):
+        if ports == None: #Default usb ports
+            self.controllers = [
                 Arduino('/dev/ttyUSB0'),
                 Arduino('/dev/ttyUSB1')
+                ]
+        else:
+            self.controllers = [
+                Arduino(ports[0]),
+                Arduino(ports[1])
                 ]
         self.filename = filename
         self.loadMIDI(filename)
@@ -120,8 +129,15 @@ def main():
     parser.add_argument('--loop', action='store_true', help='Continuously replay file')
     parser.add_argument('-k', type=int, help='Number of notes to keyshift the original MIDI file by. Default=-12', default=DEFAULT_KEYSHIFT)
     args = parser.parse_args()
+
+    ports = None
+    try:
+        with open(CONFIG, 'r') as file:
+            ports = json.load(file)['arduino']['ports']
+    except:
+        print(f'WARNING: Could not find \"{CONFIG}\". Using default configuraiton')
     
-    player = Player(args.filename)
+    player = Player(args.filename, ports)
     player.run(loop=args.loop, keyshift=args.k)
 
 if __name__ == "__main__":
