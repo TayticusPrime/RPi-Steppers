@@ -1,3 +1,4 @@
+import argparse
 import serial
 import struct
 import time
@@ -7,7 +8,9 @@ from notes import NOTES
 
 #Constants
 INIT_TIME = 2.0
-MAX_STEPPERS = 4
+STEPPERS_PER_CONTROLLER = 4 
+MAX_CONTROLLERS = 2
+QUANTA = 0.05
 
 #RequestMode Enum
 OFF = 0
@@ -17,7 +20,7 @@ ALL_OFF = 3
 
 class Arduino:
     def __init__(self, channel):
-        print(f'Initializing communication to Arduino on {channel}...')
+        print(f'Initializing Arduino on {channel}...')
         self.channel = channel
         self.arduino = serial.Serial(channel, 9600, timeout=1)
         time.sleep(INIT_TIME)
@@ -29,10 +32,6 @@ class Arduino:
         self.arduino.write(payload)
         return self.arduino.is_open
     
-    def read(self):
-        if self.arduino.in_waiting > 0:
-            return self.arduino.read(self.arduino.in_waiting)
-
 class Track:
     def __init__(self, track, arduino, stepper):
         self.track = track
@@ -41,6 +40,9 @@ class Track:
 
         self.index = 1
 
+    def restart(self):
+        self.index = 1
+    
     def update(self, timestamp):
         if self.index < len(self.track.notes):
             if timestamp >= self.track.notes[self.index].start:
@@ -54,7 +56,10 @@ class Track:
 
 class Player:
     def __init__(self, filename):
-        self.controller = Arduino('/dev/ttyUSB0')
+        self.controllers = [
+                Arduino('/dev/ttyUSB0'),
+                Arduino('/dev/ttyUSB1')
+                ]
         self.filename = filename
         self.loadMIDI(filename)
 
@@ -62,28 +67,43 @@ class Player:
         midi = pretty_midi.PrettyMIDI(filename)
 
         self.tracks = []
-        for i, instrument in enumerate(midi.instruments):
-            if i >= MAX_STEPPERS: break
-            self.tracks.append(Track(instrument, self.controller, i+1))
+        for index, instrument in enumerate(midi.instruments):
+            if index >= MAX_CONTROLLERS * STEPPERS_PER_CONTROLLER: break
+            i = index // STEPPERS_PER_CONTROLLER
+            j = index % STEPPERS_PER_CONTROLLER
+            self.tracks.append(Track(instrument, self.controllers[i], j+1))
 
-    def run(self):
+    def run(self, loop=False):
         print(f'Playing file \"{self.filename}\"...')
 
-        start = time.time()
-        complete = False
-        while(not complete):
-            timestamp = time.time() - start
-            complete = True
+        while(True):
             for track in self.tracks:
-                status = track.update(timestamp)
-                complete = complete and status
-            time.sleep(0.05)
+                track.restart()
+
+            start = time.time()
+            complete = False
+            while(not complete):
+                timestamp = time.time() - start
+                complete = True
+                for track in self.tracks:
+                    status = track.update(timestamp)
+                    complete = complete and status
+                time.sleep(QUANTA)
+
+            if not loop: break
 
         print(f'Completed \"{self.filename}!\"')
 
 def main():
-    player = Player('song_1.mid')
-    player.run()
+    parser = argparse.ArgumentParser(description='Arduino stepper MIDI player')
+
+    parser.add_argument('filename', help='Input MIDI file of type .mid')
+    parser.add_argument('--loop', action='store_true', help='Continuously replay file')
+
+    args = parser.parse_args()
+    
+    player = Player(args.filename)
+    player.run(args.loop)
 
 if __name__ == "__main__":
     main()
