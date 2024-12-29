@@ -20,10 +20,13 @@ def main():
 
     request(ar1,1,1,523.25,0.0)
     request(ar2,1,1,523.25,0.0)
+    time.sleep(0.5)
     request(ar1,2,1,659.25,0.0)
     request(ar2,2,1,659.25,0.0)
+    time.sleep(0.5)
     request(ar1,3,1,783.99,0.0)
     request(ar2,3,1,783.99,0.0)
+    time.sleep(0.5)
     request(ar1,4,1,1046.50,0.0)
     request(ar2,4,1,1046.50,0.0)
 

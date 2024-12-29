@@ -15,7 +15,7 @@ commands, as well as manages real-time execution of the contained steppers.
 #include "controller.h"
 
 //Constants
-#define POLL_TIME 0.01f      //Seconds
+#define POLL_TIME 0.005f      //Seconds
 #define MAX_CONTROLLERS 4
 #define REQUEST_LENGTH 12   //Length of serial request payload
 
