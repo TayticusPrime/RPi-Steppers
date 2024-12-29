@@ -13,7 +13,7 @@ import argparse
 import json
 
 #Internal Dependencies
-from midi import Player
+from modules.midi import Player
 
 #Constants
 CONFIG = '../config.json'

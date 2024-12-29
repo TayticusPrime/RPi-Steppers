@@ -4,7 +4,7 @@ import time
 import pretty_midi
 
 #Internal Dependencies
-from arduino import Arduino
+from .arduino import Arduino
 
 #Constants
 STEPPERS_PER_CONTROLLER = 4 
