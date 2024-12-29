@@ -10,13 +10,16 @@ specific input frequencies, for specific durations, executed in real-time.
 #ifndef _CONTROLLER_H_
 #define _CONTROLLER_H_
 
+#define DEFAULT_DIRECTION HIGH
+
 //Includes
 #include <stdint.h>
 
 class Controller {
   public:
     //Constructor/Destructor
-    Controller(uint8_t step_pin, uint8_t dir_pin);
+    Controller(uint8_t step_pin, uint8_t dir_pin, uint8_t enbl_pin);  //flip_flop_mode = false
+    Controller(uint8_t step_pin, uint8_t dir_pin, uint8_t enbl_pin, bool flip_flop_mode);
     virtual ~Controller();
 
     //Activate stepper for a finite time
@@ -27,11 +30,14 @@ class Controller {
     void update();
     //Turn off stepper and reset direction
     void turnOff();
+    //Set reverse mode
+    void setReverseMode(bool state);
     
   private:
     //Pins
     uint8_t _step_pin;  //Pin for step control
     uint8_t _dir_pin;   //Pin for direction control
+    uint8_t _enbl_pin;  //Pin for controlling stepper chip power
 
     //Clock and limited duration activation
     bool _active;         //Flag - whether stepper active or not
@@ -47,6 +53,7 @@ class Controller {
 
     //Direction control
     uint8_t changeDirection();  //Change direction
+    bool _flip_flop_mode;       //Flip-flop state (change direction with each note)
     uint8_t _direction;         //Current direction
 };
 

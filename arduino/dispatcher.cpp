@@ -26,9 +26,12 @@ Dispatcher::~Dispatcher() {
 }
 
 //Create and attache stepper-controller object
-void Dispatcher::attachController(uint8_t id, uint8_t step_pin, uint8_t dir_pin) {
+void Dispatcher::attachController(uint8_t id, uint8_t step_pin, uint8_t dir_pin, uint8_t enbl_pin) {
+  attachController(id, step_pin, dir_pin, enbl_pin, false);
+}
+void Dispatcher::attachController(uint8_t id, uint8_t step_pin, uint8_t dir_pin, uint8_t enbl_pin, bool flip_flop_mode) {
   if(_controllers[id]) delete _controllers[id];
-  _controllers[id] = new Controller(step_pin, dir_pin);
+  _controllers[id] = new Controller(step_pin, dir_pin, enbl_pin, flip_flop_mode);
 }
 
 //Update - call this cyclically to update contents in real-time
@@ -50,7 +53,14 @@ void Dispatcher::update() {
           case(RequestMode::OFF):
             _controllers[rqUnion.request.stepper_id]->changeState(false, rqUnion.request.frequency);
             break;
+          case(RequestMode::STANDARD_MODE):
+            setReverseMode(false);
+            break;
+          case(RequestMode::FLIP_FLOP_MODE):
+            setReverseMode(true);
+            break;
           case(RequestMode::ALL_OFF):
+          default:
             allOff();
             break;
         }
@@ -70,11 +80,16 @@ void Dispatcher::update() {
   delayMicroseconds(QUANTA);
 }
 
+//Set reverse mode for all steppers
+void Dispatcher::setReverseMode(bool state) {
+  for(int i=0; i<MAX_CONTROLLERS; ++i) {
+    if(_controllers[i]) _controllers[i]->setReverseMode(state);
+  }
+}
+
 //Turn off all steppers and reset direction
 void Dispatcher::allOff() {
   for(int i=0; i<MAX_CONTROLLERS; ++i) {
-    if(_controllers[i]) {
-      _controllers[i]->turnOff();
-    }
+    if(_controllers[i]) _controllers[i]->turnOff();
   }
 }

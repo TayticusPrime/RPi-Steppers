@@ -1,5 +1,7 @@
 #include "dispatcher.h"
 
+#define FLIP_FLOP_MODE true
+
 //Dispatcher object - contains and manages controller sub-objects
 Dispatcher dispatcher;
 
@@ -9,10 +11,10 @@ void setup() {
   while(!Serial) {}
 
   //Attach stepper controllers
-  dispatcher.attachController(0, 12, 11);
-  dispatcher.attachController(1, 10, 9);
-  dispatcher.attachController(2, 8, 7);
-  dispatcher.attachController(3, 6, 5);
+  dispatcher.attachController(0, 13, 12, 11, FLIP_FLOP_MODE);
+  dispatcher.attachController(1, 10, 9, 8, FLIP_FLOP_MODE);
+  dispatcher.attachController(2, 7, 6, 5, FLIP_FLOP_MODE);
+  dispatcher.attachController(3, 4, 3, 2, FLIP_FLOP_MODE);
 }
 
 void loop() {

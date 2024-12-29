@@ -15,19 +15,19 @@ frequency_label = tk.Label(root, text="Frequency (Hz):")
 frequency_label.grid(row=0, column=0, padx=10, pady=10, sticky='w')
 frequency_entry = tk.Entry(root)
 frequency_entry.grid(row=0, column=1, padx=10, pady=10, sticky='e')
-frequency_entry.insert(0, "220.0")  # Default value for frequency
+frequency_entry.insert(0, "1046.50")  # Default value for frequency
 
 duration_label = tk.Label(root, text="Duration (s):")
 duration_label.grid(row=1, column=0, padx=10, pady=10, sticky='w')
 duration_entry = tk.Entry(root)
 duration_entry.grid(row=1, column=1, padx=10, pady=10, sticky='e')
-duration_entry.insert(0, "1.0")  # Default value for duration
+duration_entry.insert(0, "5.0")  # Default value for duration
 
 mode_label = tk.Label(root, text="Mode:")
 mode_label.grid(row=2, column=0, padx=10, pady=10, sticky='w')
 
 # Mode drop-down menu
-mode_values = ["OFF", "ON", "PULSE", "ALL OFF"]
+mode_values = ["OFF", "ON", "PULSE", "STANDARD MODE", "FLIP-FLOP MODE", "ALL OFF"]
 mode_var = tk.StringVar(root)
 mode_var.set(mode_values[2])  # Default value set to "PULSE"
 mode_menu = tk.OptionMenu(root, mode_var, *mode_values)
@@ -67,6 +67,10 @@ def send_data():
             mode = 2
         elif mode_str == "ALL OFF":
             mode = 3
+        elif mode_str == "STANDARD MODE":
+            mode = 4
+        elif mode_str == "FLIP-FLOP MODE":
+            mode = 5
         else:
             print("Invalid mode selected.")
             return
