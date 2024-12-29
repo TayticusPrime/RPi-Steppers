@@ -40,7 +40,7 @@ void Controller::pulse(float freq, float duration) {
   _active = true;
 
   _sub_clock = 0;
-  _sub_end = (uint32_t)((1000000 / freq) * CALIBRATE_M);
+  _sub_end = (uint32_t)((1000000 / (freq * TUNE_M)) * CALIBRATE_M);
   _sub_mid = (uint32_t)(_sub_end / 2);
 
   //Enable stepper chip
@@ -65,7 +65,7 @@ void Controller::changeState(bool state, float freq) {
     _end = 1;
   
     _sub_clock = 0;
-    _sub_end = (uint32_t)((1000000 / freq) * CALIBRATE_M);
+    _sub_end = (uint32_t)((1000000 / (freq * TUNE_M)) * CALIBRATE_M);
     _sub_mid = (uint32_t)(_sub_end / 2);
 
     //Enable stepper chip

@@ -15,13 +15,13 @@ frequency_label = tk.Label(root, text="Frequency (Hz):")
 frequency_label.grid(row=0, column=0, padx=10, pady=10, sticky='w')
 frequency_entry = tk.Entry(root)
 frequency_entry.grid(row=0, column=1, padx=10, pady=10, sticky='e')
-frequency_entry.insert(0, "220.0")  # Default value for frequency
+frequency_entry.insert(0, "1046.50")  # Default value for frequency
 
 duration_label = tk.Label(root, text="Duration (s):")
 duration_label.grid(row=1, column=0, padx=10, pady=10, sticky='w')
 duration_entry = tk.Entry(root)
 duration_entry.grid(row=1, column=1, padx=10, pady=10, sticky='e')
-duration_entry.insert(0, "1.0")  # Default value for duration
+duration_entry.insert(0, "5.0")  # Default value for duration
 
 mode_label = tk.Label(root, text="Mode:")
 mode_label.grid(row=2, column=0, padx=10, pady=10, sticky='w')
