@@ -27,7 +27,7 @@ mode_label = tk.Label(root, text="Mode:")
 mode_label.grid(row=2, column=0, padx=10, pady=10, sticky='w')
 
 # Mode drop-down menu
-mode_values = ["OFF", "ON", "PULSE", "ALL OFF"]
+mode_values = ["OFF", "ON", "PULSE", "STANDARD MODE", "FLIP-FLOP MODE", "ALL OFF"]
 mode_var = tk.StringVar(root)
 mode_var.set(mode_values[2])  # Default value set to "PULSE"
 mode_menu = tk.OptionMenu(root, mode_var, *mode_values)
@@ -67,6 +67,10 @@ def send_data():
             mode = 2
         elif mode_str == "ALL OFF":
             mode = 3
+        elif mode_str == "STANDARD MODE":
+            mode = 4
+        elif mode_str == "FLIP-FLOP MODE":
+            mode = 5
         else:
             print("Invalid mode selected.")
             return

@@ -24,15 +24,16 @@ enum RequestMode: uint8_t {
   OFF = 0,
   ON = 1,
   PULSE = 2,
-  ALL_OFF = 3
+  ALL_OFF = 3,
+  STANDARD_MODE = 4,
+  FLIP_FLOP_MODE = 5
 };
 
 //Struct of serial request
 struct Request {
   uint8_t stepper_id;
   RequestMode mode;
-  uint8_t res_1;
-  uint8_t res_2;
+  uint16_t res;
   float frequency;
   float duration;
 };
@@ -50,9 +51,12 @@ class Dispatcher {
     ~Dispatcher();
 
     //Create a controller object and attach it
-    void attachController(uint8_t id, uint8_t step_pin, uint8_t dir_pin);
+    void attachController(uint8_t id, uint8_t step_pin, uint8_t dir_pin, uint8_t enbl_pin); //flip_flop_mode = false
+    void attachController(uint8_t id, uint8_t step_pin, uint8_t dir_pin, uint8_t enbl_pin, bool flip_flop_mode);
     //Increment in real-time
     void update();
+    //Set reverse or always forward mode
+    void setReverseMode(bool state);
     //Turn off all steppers
     void allOff();
     
