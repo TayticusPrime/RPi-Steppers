@@ -7,12 +7,16 @@ class can be used to instantiate arduino-stepper objects and play supplied midi 
 '''
 
 #External Dependencies
+import os
+import sys
 import time
 import pretty_midi
 
 #Internal Dependencies
-from .arduino import Arduino
-from .arduino import STEPPERS_PER_CONTROLLER
+MODULES_PATH = '.'
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), MODULES_PATH)))
+from arduino import Arduino
+from arduino import STEPPERS_PER_CONTROLLER
 
 #Constants
 MAX_CONTROLLERS = 2

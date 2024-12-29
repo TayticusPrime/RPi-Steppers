@@ -8,11 +8,17 @@ stepper motors. See help (--help or -h) for more details
 '''
 
 #External Dependencies
+import os
+import sys
 import argparse
 import json
 
 #Internal Dependencies
-from modules.midi import Player
+MODULES_PATH = './modules'
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), MODULES_PATH)))
+from arduino import Arduino
+from midi import Player
+from midi import NOTES
 
 #Constants
 CONFIG = '../config.json'
