@@ -40,7 +40,7 @@ def main():
         with open(CONFIG, 'r') as file:
             ports = json.load(file)['arduino']['ports']
     except:
-        print(f'WARNING: Could not find \"{CONFIG}\". Using default configuraiton')
+        print(f'WARNING: Could not find \"{CONFIG}\". Using default configuration')
     
     #Instantiate Player, load midi, and play including provided terminal arguments
     player = Player(ports=ports)

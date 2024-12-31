@@ -1,1 +1,1 @@
-python serial_tester.py
+python serial_gui.py

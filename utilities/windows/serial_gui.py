@@ -1,10 +1,27 @@
+#serial_gui.py
+'''
+Author: Tayte Waterman
+Date: Dec 2024
+About: GUI to interact with arduino-stepper board. Allows the user to call individual stepper
+motors and send values for all supported (serial) methods. Connects on port in ./config.json
+or 'COM3' by default.
+'''
+
+#External dependencies
+import json
 import tkinter as tk
 import serial
 import struct
-import time
 
-# Set up serial connection (replace with your correct COM port)
-arduino = serial.Serial('COM3', 9600, timeout=1)
+# Set up serial connection
+CONFIG = './config.json'
+port = 'COM3'
+try:
+    with open(CONFIG, 'r') as file:
+        port = json.load(file)['arduino']['port']
+except:
+    print(f'WARNING: Could not find \"{CONFIG}\". Using default configuration')
+arduino = serial.Serial(port, 9600, timeout=1)
 
 # Set up the Tkinter GUI
 root = tk.Tk()
@@ -15,13 +32,13 @@ frequency_label = tk.Label(root, text="Frequency (Hz):")
 frequency_label.grid(row=0, column=0, padx=10, pady=10, sticky='w')
 frequency_entry = tk.Entry(root)
 frequency_entry.grid(row=0, column=1, padx=10, pady=10, sticky='e')
-frequency_entry.insert(0, "1046.50")  # Default value for frequency
+frequency_entry.insert(0, "523.25")  # Default value for frequency
 
 duration_label = tk.Label(root, text="Duration (s):")
 duration_label.grid(row=1, column=0, padx=10, pady=10, sticky='w')
 duration_entry = tk.Entry(root)
 duration_entry.grid(row=1, column=1, padx=10, pady=10, sticky='e')
-duration_entry.insert(0, "5.0")  # Default value for duration
+duration_entry.insert(0, "1.0")  # Default value for duration
 
 mode_label = tk.Label(root, text="Mode:")
 mode_label.grid(row=2, column=0, padx=10, pady=10, sticky='w')
