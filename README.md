@@ -3,6 +3,9 @@
 ## About
 The following repository contains code for a stepper-based music player. The player takes input music files (MIDI format) and translates them into stepper control values which mimic the target music notes (frequency). It is designed to work with an 8-channel (stepper) setup via Arduino Nano devices as the stepper controller, with MIDI reading and overall control from a Raspberry Pi (5) device.
 
+![PXL_20241231_134127112](https://github.com/user-attachments/assets/0863266c-4b3e-4b67-b3c8-698e7af5bd5e)
+
+
 The following code-base contains the target Arduino (Nano) code, Raspberry Pi code, and testing utilities (both from Linux and Windows) for hardware troubleshooting purposes
 
 ## Usage
@@ -18,3 +21,9 @@ The target Arduino (Nano) contents can be found in `arduino/`. To build and depl
 
 ### Testing
 Testing of the board (for hardware troubleshooting) can be found in the `utilities/` folder. Here there are two sub-folders. `linux/` contains a python script for exercising all stepper oututs to confirm basic serial-connection and hardware setup. `windows/` contains a python script/GUI for explicit control of (a single) Arduino board to test specific serial commands/methods to the board.
+
+## Hardware
+
+### Components
+
+### Circuit Diagram
