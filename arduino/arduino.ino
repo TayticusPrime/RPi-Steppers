@@ -6,7 +6,7 @@ About: The following arduino sketch manages an arduino-stepper controller which 
 commands and translates them into specific frequencies used to play music over the steppers.
 */
 
-#include "dispatcher.h"
+#include "src/include/dispatcher.h"
 
 #define FLIP_FLOP_MODE true
 
