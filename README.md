@@ -25,5 +25,13 @@ Testing of the board (for hardware troubleshooting) can be found in the `utiliti
 ## Hardware
 
 ### Components
+* Qty 1 - Raspberry Pi 5 - Main control board for MIDI player and Arduino build/deployment
+* Qty 2 - Arduino Nano - Stepper controller board; 4 steppers per board
+* Qty 8 - A4988 Stepper Driver Board (https://www.amazon.de/dp/B0CD756ZCC?ref=ppx_yo2ov_dt_b_fed_asin_title)
+* Qty 8 - Stepper Motor (GEEETECH 3D Printer Motor https://www.amazon.de/dp/B0CCS1JCYL?ref=ppx_yo2ov_dt_b_fed_asin_title)
+* Qty 8 - 100 uF Capacitor - Stepper motor supply (Protect rest of project from motor voltage spikes)
+
+Variable Power-Supply: 12VDC @ 500mA
 
 ### Circuit Diagram
+![image](https://github.com/user-attachments/assets/b91c59f1-228e-497d-b7d8-3205a27cade1)
