@@ -1,8 +1,18 @@
+#test_steppers.py
+'''
+Author: Tayte Waterman
+Date: Dec 2024
+About: Test arduino-stepper hardware (Linux). Script exercises all steppers for two arduino
+boards. For more granular control use Windows GUI in utilities/windows/
+'''
+
+#External dependencies
+import os
+import sys
 import json
 import time
-import sys
-import os
 
+#Internal dependencies
 MODULES_PATH = '../../pi/modules'
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), MODULES_PATH)))
 from arduino import Arduino
@@ -18,7 +28,7 @@ def main():
         with open(CONFIG, 'r') as file:
             ports = json.load(file)['arduino']['ports']
     except:
-        print(f'WARNING: Could not find \"{CONFIG}\". Using default configuraiton')
+        print(f'WARNING: Could not find \"{CONFIG}\". Using default configuration')
         ports = [
                 '/dev/ttyUSB0',
                 '/dev/ttyUSB1'
