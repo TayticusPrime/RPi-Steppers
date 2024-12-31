@@ -25,7 +25,8 @@ Testing of the board (for hardware troubleshooting) can be found in the `utiliti
 ## Hardware
 
 ### Circuit Diagram
-![image](https://github.com/user-attachments/assets/b91c59f1-228e-497d-b7d8-3205a27cade1)
+![image](https://github.com/user-attachments/assets/7db0d3f4-e941-40dd-85a3-b9aaf09fa1be)
+
 
 ### Components
 * Qty 1 - Raspberry Pi 5 - Main control board for MIDI player and Arduino build/deployment
@@ -34,4 +35,4 @@ Testing of the board (for hardware troubleshooting) can be found in the `utiliti
 * Qty 8 - Stepper Motor (GEEETECH 3D Printer Motor https://www.amazon.de/dp/B0CCS1JCYL?ref=ppx_yo2ov_dt_b_fed_asin_title)
 * Qty 8 - 100 uF Capacitor - Stepper motor supply (Protect rest of project from motor voltage spikes)
 
-Variable Power-Supply: 12VDC @ 500mA
+Variable Power-Supply: 12VDC @ 750mA
