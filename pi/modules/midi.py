@@ -1,3 +1,10 @@
+#midi.py
+'''
+Author: Tayte Waterman
+Date: Dec 2024
+About: The following contains MIDI to arduino-stepper translation and playing. The main Player
+class can be used to instantiate arduino-stepper objects and play supplied midi files over them
+'''
 
 #External Dependencies
 import time
@@ -5,19 +12,12 @@ import pretty_midi
 
 #Internal Dependencies
 from .arduino import Arduino
+from .arduino import STEPPERS_PER_CONTROLLER
 
 #Constants
-STEPPERS_PER_CONTROLLER = 4 
 MAX_CONTROLLERS = 2
 QUANTA = 0.05
 
-#RequestMode Enum
-OFF = 0
-ON = 1
-PULSE = 2
-ALL_OFF = 3
-
-#Constants
 NOTES = {
     'MIN': 21,
     21:  27.5000,  # A0
@@ -111,6 +111,7 @@ NOTES = {
     'MAX': 108,
 }
 
+#Track class - manage a single "track" of notes assigned to a single arduino stepper
 class Track:
     def __init__(self, notes, arduino, stepper):
         self.notes = notes
@@ -123,20 +124,25 @@ class Track:
         self.index = 1
     
     def update(self, timestamp, keyshift=0, scalar=1.0):
+        #Externally called. Update contents. provide external timestamp for real-time progression
+
+        #If notes to be played, play them if the timestamp of the next note has arrived
         if self.index < len(self.notes):
             if timestamp >= self.notes[self.index].start * scalar:
                 note = self.notes[self.index]
                 pitch = note.pitch + keyshift
                 if pitch >= NOTES['MIN'] and pitch <= NOTES['MAX']:
-                    self.arduino.send(self.stepper,
-                                      PULSE,
-                                      NOTES[pitch],
-                                      (note.end - note.start) * scalar
-                                      )
+                    self.arduino.play_note( self.stepper,
+                                            NOTES[pitch],
+                                            (note.end - note.start) * scalar
+                                            )
                 self.index += 1
+            
+            #Flag that track is still playing (incomplete)
             return False
 
         else:
+            #Flag that track is complete
             return True
 
 class Player:
@@ -154,6 +160,8 @@ class Player:
         if filename != None: self.loadMIDI(filename)
 
     def loadMIDI(self, filename, distributed=False):
+        #Load midi from file and pre-process
+
         self.filename = filename
         midi = pretty_midi.PrettyMIDI(filename)
 
@@ -169,14 +177,20 @@ class Player:
         else:
             #Distribute notes across all channels instead of midi assignment
             print('Resdistributing notes...')
+
+            #Create a 'supertrack' of all notes combined into one list in order
             supertrack = []
             for i, instrument in enumerate(midi.instruments):
                 supertrack += instrument.notes
             supertrack = sorted(supertrack, key=lambda x: x.start)
             
+            #Iterate over notes and one-by-one assign notes to steppers in order. Wrap around
+            #  to first stepper once the last stepper is reached
             tracks = [[] for x in range(MAX_CONTROLLERS * STEPPERS_PER_CONTROLLER)]
             i = 0
             for note in supertrack:
+                #If a note is still being played find the next free stepper. If none can be
+                #  found, overwrite original stepper
                 temp = i
                 while len(tracks[i]) != 0 and note.start < tracks[i][-1].end:
                     i += 1
@@ -185,19 +199,24 @@ class Player:
 
                 tracks[i].append(note)
             
+            #Convert results to self.tracks
             for i in range(MAX_CONTROLLERS):
                 for j in range(STEPPERS_PER_CONTROLLER):
                     k = i * STEPPERS_PER_CONTROLLER + j
                     self.tracks.append(Track(tracks[k], self.controllers[i], j+1))
 
     def run(self, loop=False, keyshift=0, timeshift=1.0):
+        #Play contained midi (processed) song
         print(f'Playing file \"{self.filename}\"...')
         scalar = 1.0/timeshift
 
+        #While song still active fetch real-time and call stepper update()
         while(True):
+            #Restart in case previous song indices present
             for track in self.tracks:
                 track.restart()
 
+            #Fetch real-time from system, convert to relative song-time and update
             start = time.time()
             complete = False
             while(not complete):
@@ -206,7 +225,7 @@ class Player:
                 for track in self.tracks:
                     status = track.update(timestamp, keyshift, scalar)
                     complete = complete and status
-                time.sleep(QUANTA)
+                time.sleep(QUANTA)  #Minimum iteration step (don't hog CPU)
 
             if not loop: break
 

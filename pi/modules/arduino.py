@@ -1,11 +1,9 @@
-#player.py
-
+#arduino.py
 '''
 Author: Tayte Waterman
 Date: Dec 2024
-About: The following script reads external MIDI files and translates up to 8 channels
-of the contained content into serial commands to play via Arduino-controlled
-stepper motors.
+About: The following contains the Arduino class used to manage arduino-stepper communication and
+control.
 '''
 
 #Dependencies
@@ -14,6 +12,7 @@ import struct
 import time
 
 #Constants
+STEPPERS_PER_CONTROLLER = 4
 INIT_TIME = 2.0
 
 #RequestMode Enum
@@ -22,7 +21,7 @@ ON = 1
 PULSE = 2
 ALL_OFF = 3
 STANDARD_MODE = 4
-FLIP_FLOW_MODE = 5
+FLIP_FLOP_MODE = 5
 
 class Arduino:
     def __init__(self, channel):
@@ -31,9 +30,36 @@ class Arduino:
         self.arduino = serial.Serial(channel, 9600, timeout=1)
         time.sleep(INIT_TIME)
 
-    def send(self, stepper, mode, frequency, duration):
-        if (stepper<1 or stepper>4) or (mode<0 or mode>3) or frequency < 0 or duration < 0: return -1
-
+    def serialize(self, stepper, mode, frequency, duration):
+        #Serialize arguments and send to arduino
         payload = struct.pack('B B f f', stepper, mode, frequency, duration)
         self.arduino.write(payload)
         return self.arduino.is_open
+
+    def play_note(self, stepper, frequency, duration=None):
+        #Play a single note for duration (sec). If duration not provided, play indefinitely
+
+        if (stepper<1 or stepper>STEPPERS_PER_CONTROLLER) or frequency < 0 or duration < 0: return -1
+
+        mode = PULSE
+        if(duration == None): mode = ON
+
+        return self.serialize(stepper, mode, frequency, duration)
+    
+    def turn_off(self, stepper=None):
+        #Turn off provided stepper. If stepper not provided, turn off all steppers
+
+        if stepper != None and (stepper<1 or stepper>STEPPERS_PER_CONTROLLER): return -1
+
+        if stepper != None:
+            return self.serialize(stepper, OFF, 0.0, 0.0)
+        else:
+            return self.serialize(1, ALL_OFF, 0.0, 0.0)
+    
+    def flip_flop_mode(self, state):
+        #Set flip-flop mode (whether motor should change direction with each note or not)
+
+        mode = STANDARD_MODE
+        if state: mode = FLIP_FLOP_MODE
+
+        return self.serialize(1, mode, 0.0, 0.0)

@@ -1,11 +1,10 @@
 #player.py
-
 '''
 Author: Tayte Waterman
 Date: Dec 2024
 About: The following script reads external MIDI files and translates up to 8 channels
 of the contained content into serial commands to play via Arduino-controlled
-stepper motors.
+stepper motors. See help (--help or -h) for more details
 '''
 
 #External Dependencies
@@ -19,6 +18,7 @@ from modules.midi import Player
 CONFIG = '../config.json'
 
 def main():
+    #Help and argument parsing definition:
     parser = argparse.ArgumentParser(description='Arduino stepper MIDI player')
 
     parser.add_argument('filename', help='Input MIDI file of type .mid')
@@ -28,6 +28,7 @@ def main():
     parser.add_argument('-t', type=float, help='Scalar for speeding-up/slowing-down track', default=1.0)
     args = parser.parse_args()
 
+    #Extract arduino config information from external file
     ports = None
     try:
         with open(CONFIG, 'r') as file:
@@ -35,6 +36,7 @@ def main():
     except:
         print(f'WARNING: Could not find \"{CONFIG}\". Using default configuraiton')
     
+    #Instantiate Player, load midi, and play including provided terminal arguments
     player = Player(ports=ports)
     player.loadMIDI(args.filename, distributed=args.distributed)
     player.run(loop=args.loop, keyshift=args.k, timeshift=args.t)
