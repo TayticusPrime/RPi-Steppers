@@ -1,3 +1,11 @@
+//arduino.ino
+/*
+Author: Tayte Waterman
+Date: Dec 2024
+About: The following arduino sketch manages an arduino-stepper controller which takes serial
+commands and translates them into specific frequencies used to play music over the steppers.
+*/
+
 #include "dispatcher.h"
 
 #define FLIP_FLOP_MODE true
