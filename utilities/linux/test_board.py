@@ -1,8 +1,11 @@
 import json
 import time
+import sys
+import os
 
-from ..pi.modules.arduino import Arduino
-from ..pi.modules.midi import NOTES
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
+from pi.modules.arduino import Arduino
+from pi.modules.midi import NOTES
 
 #Constants
 CONFIG = '../config.json'
