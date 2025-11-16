@@ -9,9 +9,9 @@ The following repository contains code for a stepper-based music player. The pla
 The following code-base contains the target Arduino (Nano) code, Raspberry Pi code, and testing utilities (both from Linux and Windows) for hardware troubleshooting purposes
 
 ## Video Demos
-[Tetris Theme (“Korobeiniki”)](https://youtu.be/e9bMyeX0_78)
-[Bonetrousle (Toby Fox)](https://youtu.be/AKarNMXLM8k)
-[Pokémon Trainer Battle Theme (Gen 1) (Junichi Masuda)](https://youtu.be/eGSxeZ7RHHc)
+[Tetris Theme (“Korobeiniki”)](https://youtu.be/e9bMyeX0_78)   
+[Bonetrousle (Toby Fox)](https://youtu.be/AKarNMXLM8k)   
+[Pokémon Trainer Battle Theme (Gen 1) (Junichi Masuda)](https://youtu.be/eGSxeZ7RHHc)   
 
 ## Usage
 ### MIDI Player
